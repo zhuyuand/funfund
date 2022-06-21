@@ -1,3 +1,6 @@
+# -*-coding:utf-8-*-
+
+
 def main():
     print('项目初始化')
 
