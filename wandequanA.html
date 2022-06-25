@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="main" style="width: 1200px;height:600px;"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.3.3/echarts.min.js"></script>
+
+<script>
+    var myChart = echarts.init(document.getElementById('main'));
+
+    <!--    axios设置header-->
+    const request = axios.create({});
+    // 后置
+    request.interceptors.response.use(function (response) {
+        // 对响应数据做点什么
+        return response.data;
+    }, function (error) {
+        // 对响应错误做点什么
+        return Promise.reject(error);
+    });
+    let URL = 'https://api.jiucaishuo.com/v2/guzhi/newtubiaolinedata';
+
+    let data = {
+        "gu_code": "881003.WI", "pe_category": "pb", "year": 5, "ver": "new", "type": "pc", "data_source": "xichou",
+        "version": "2.0.0", "authtoken": "fF1qu720kZQZf14E2zhhAgMFCpjuC/qW", "act_time": +new Date(),
+        "tirgkjfs": "46", "abiokytke": "d3", "u54rg5d": "94", "kf54ge7": "2", "tiklsktr4": "6", "lksytkjh": "18de",
+        "sbnoywr": "b1", "bgd7h8tyu54": "2b", "y654b5fs3tr": "6", "bioduytlw": "f", "bd4uy742": "8", "h67456y": "c18",
+        "bvytikwqjk": "2b", "ngd4uy551": "18", "bgiuytkw": "de", "nd354uy4752": "3", "ghtoiutkmlg": "6dc",
+        "bd24y6421f": "16", "tbvdiuytk": "c", "ibvytiqjek": "b7", "jnhf8u5231": "de", "fjlkatj": "946",
+        "hy5641d321t": "68", "iogojti": "6", "ngd4yut78": "dc", "nkjhrew": "8", "yt447e13f": "5", "n3bf4uj7y7": "8",
+        "nbf4uj7y432": "d3", "yi854tew": "a3", "h13ey474": "a32", "quikgdky": "94"
+    }
+    request.post(URL, data).then(function (response) {
+        console.log(response);
+        let percent_list = response.data.percent_list;
+        for (let item in percent_list) {
+            percent_list[item] = parseFloat(percent_list[item]);
+        }
+        percent_list = Object.entries(percent_list);
+        console.log(percent_list);
+        var option = {
+            title: {
+                text: '万得全A(除金融、石油石化)'
+            },
+            tooltip: {
+                trigger: 'axis',
+            },
+            // 声明一个 X 轴，类目轴（category）。默认情况下，类目轴对应到 dataset 第一列。
+            xAxis: {
+                data: percent_list.map(item => item[0])
+            },
+            // 声明一个 Y 轴，数值轴。
+            yAxis: {},
+
+            // 声明多个 bar 系列，默认情况下，每个系列会自动对应到 dataset 的每一列。
+            series: [
+                {type: 'line', 'showSymbol': false, data: percent_list.map(item => item[1])},
+            ],
+            visualMap: {
+                top: 50,
+                right: 10,
+                pieces: [
+                    {
+                        // gt: 0,
+                        lte: 10,
+                        color: '#4BA37B'
+                    },
+                    {
+                        gt: 10,
+                        lte: 30,
+                        color: '#58C2C3'
+                    },
+                    {
+                        gt: 30,
+                        lte: 70,
+                        color: '#448EF8'
+                    },
+                    {
+                        gt: 70,
+                        lte: 90,
+                        color: '#EEB140'
+                    },
+                    {
+                        gt: 90,
+                        color: '#DF3E39'
+                    },
+                ],
+                outOfRange: {
+                    color: '#999'
+                }
+            },
+            dataZoom: [
+                {
+                    startValue: '2020-06-24'
+                },
+                {
+                    type: 'inside'
+                }
+            ],
+            toolbox: {
+                right: 10,
+                feature: {
+                    restore: {},
+                    saveAsImage: {}
+                }
+            },
+
+        };
+        // console.log(Object.entries(percent_list));
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    }).catch(function (error) {
+        console.log(error);
+    });
+
+
+</script>
+</body>
+</html>
