@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新能源贪婪指数</title>
+</head>
+<body>
+
+<div id="main" style="width: 1200px;height:600px;"></div>
+<script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.3.3/echarts.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+    var myChart = echarts.init(document.getElementById('main'));
+
+    <!--    axios设置header-->
+    var request = axios.create({});
+    // 后置
+    request.interceptors.response.use(function (response) {
+        // 对响应数据做点什么
+        return response.data;
+    }, function (error) {
+        // 对响应错误做点什么
+        return Promise.reject(error);
+    });
+</script>
+<script>
+    async function req(URL, data) {
+        var response = await request.post(URL, data);
+        return response;
+    }
+</script>
+<script>
+    <!--    中证新能源 -->
+    var xAxisDataZ = [];
+    var seriesDataZ = [];
+
+    async function zhongZ() {
+        let URL = 'https://api.jiucaishuo.com/v2/guzhi/newtubiaolinedata';
+
+        let data = {
+            "gu_code": "930771.CSI",
+            "pe_category": "pb",
+            "year": 3,
+            "ver": "new",
+            "type": "pc",
+            "data_source": "xichou",
+            "version": "2.0.0",
+            "authtoken": "fF1qu720kZQZf14E2zhhAgMFCpjuC/qW",
+            "act_time": +new Date(),
+            "tirgkjfs": "d6",
+            "abiokytke": "9d",
+            "u54rg5d": "5d",
+            "kf54ge7": "d",
+            "tiklsktr4": "6",
+            "lksytkjh": "b6ad",
+            "sbnoywr": "6e",
+            "bgd7h8tyu54": "f8",
+            "y654b5fs3tr": "b",
+            "bioduytlw": "d",
+            "bd4uy742": "4",
+            "h67456y": "db6",
+            "bvytikwqjk": "f8",
+            "ngd4uy551": "b6",
+            "bgiuytkw": "80",
+            "nd354uy4752": "7",
+            "ghtoiutkmlg": "b20",
+            "bd24y6421f": "ef",
+            "tbvdiuytk": "d",
+            "ibvytiqjek": "15",
+            "jnhf8u5231": "80",
+            "fjlkatj": "5d7",
+            "hy5641d321t": "f4",
+            "iogojti": "f",
+            "ngd4yut78": "20",
+            "nkjhrew": "4",
+            "yt447e13f": "4",
+            "n3bf4uj7y7": "6",
+            "nbf4uj7y432": "9d",
+            "yi854tew": "b7",
+            "h13ey474": "b7d",
+            "quikgdky": "a3"
+        };
+        let response = await req(URL, data);
+        let percent_list = response.data.percent_list;
+        for (let item in percent_list) {
+            percent_list[item] = parseFloat(percent_list[item]);
+        }
+        console.log(percent_list);
+        seriesDataZ = Object.entries(percent_list);
+        xAxisDataZ = Object.keys(percent_list);
+        // console.log(xAxisDataZ,'xAxisDataZ');
+        console.log(seriesDataZ);
+    }
+
+
+</script>
+<script>
+    <!--    CS新能车 -->
+    var seriesDataCS = [];
+
+    async function CS() {
+        let URL = 'https://api.jiucaishuo.com/v2/guzhi/newtubiaolinedata';
+
+        let data = {
+            "gu_code": "399976.SZ",
+            "pe_category": "pb",
+            "year": 3,
+            "ver": "new",
+            "type": "pc",
+            "data_source": "xichou",
+            "version": "2.0.0",
+            "authtoken": "fF1qu720kZQZf14E2zhhAgMFCpjuC/qW",
+            "act_time": +new Date(),
+            "tirgkjfs": "4f",
+            "abiokytke": "b7",
+            "u54rg5d": "56",
+            "kf54ge7": "3",
+            "tiklsktr4": "f",
+            "lksytkjh": "7f61",
+            "sbnoywr": "2a",
+            "bgd7h8tyu54": "b6",
+            "y654b5fs3tr": "e",
+            "bioduytlw": "7",
+            "bd4uy742": "a",
+            "h67456y": "c7f",
+            "bvytikwqjk": "b6",
+            "ngd4uy551": "7f",
+            "bgiuytkw": "9a",
+            "nd354uy4752": "b",
+            "ghtoiutkmlg": "e44",
+            "bd24y6421f": "a9",
+            "tbvdiuytk": "c",
+            "ibvytiqjek": "86",
+            "jnhf8u5231": "9a",
+            "fjlkatj": "561",
+            "hy5641d321t": "9a",
+            "iogojti": "9",
+            "ngd4yut78": "44",
+            "nkjhrew": "a",
+            "yt447e13f": "6",
+            "n3bf4uj7y7": "f",
+            "nbf4uj7y432": "b7",
+            "yi854tew": "8b",
+            "h13ey474": "8b3",
+            "quikgdky": "09"
+        };
+        let response = await req(URL, data);
+        let percent_list = response.data.percent_list;
+        for (let item in percent_list) {
+            percent_list[item] = parseFloat(percent_list[item]);
+        }
+        console.log(percent_list);
+        seriesDataCS = Object.entries(percent_list);
+        console.log(seriesDataCS);
+    }
+
+
+</script>
+<script>
+    <!--    新能源TF值 -->
+    var seriesDataTF = [];
+
+    async function PH() {
+        let URL = 'https://api.jiucaishuo.com/v2/kjtlother/kjtlconnect';
+        let data = {
+            "kt_type": 4,
+            "type": "pc",
+            "data_source": "xichou",
+            "version": "2.0.0",
+            "authtoken": "fF1qu720kZQZf14E2zhhAgMFCpjuC/qW",
+            "act_time": +new Date(),
+            "tirgkjfs": "d6",
+            "abiokytke": "97",
+            "u54rg5d": "b7",
+            "kf54ge7": "d",
+            "tiklsktr4": "6",
+            "lksytkjh": "fc4c",
+            "sbnoywr": "df",
+            "bgd7h8tyu54": "31",
+            "y654b5fs3tr": "9",
+            "bioduytlw": "5",
+            "bd4uy742": "9",
+            "h67456y": "1fc",
+            "bvytikwqjk": "31",
+            "ngd4uy551": "fc",
+            "bgiuytkw": "68",
+            "nd354uy4752": "4",
+            "ghtoiutkmlg": "92d",
+            "bd24y6421f": "fa",
+            "tbvdiuytk": "1",
+            "ibvytiqjek": "cb",
+            "jnhf8u5231": "68",
+            "fjlkatj": "b78",
+            "hy5641d321t": "a9",
+            "iogojti": "a",
+            "ngd4yut78": "2d",
+            "nkjhrew": "9",
+            "yt447e13f": "5",
+            "n3bf4uj7y7": "c",
+            "nbf4uj7y432": "97",
+            "yi854tew": "14",
+            "h13ey474": "14d",
+            "quikgdky": "0e"
+        };
+        let response = await req(URL, data);
+        let datetime = response.data.xAxis.categories;
+        let seriesData = response.data.series[0].data;
+        //    合并
+        for (let i = 0; i < datetime.length; i++) {
+            seriesDataTF.push([datetime[i], seriesData[i]]);
+        }
+        console.log(seriesDataTF, 'seriesDataTF');
+    }
+</script>
+<script>
+    function getColor(value) {
+        if (value <= 10) {
+            return '#4BA37B';
+        } else if (value <= 30) {
+            return '#58C2C3';
+        } else if (value <= 70) {
+            return '#448EF8';
+        } else if (value <= 90) {
+            return '#EEB140';
+        } else {
+            return '#DF3E39';
+        }
+
+    }
+</script>
+<script>
+    Promise.all([zhongZ(), CS(), PH()]).then(() => {
+        let option = {
+            legend: {
+                name: ['中证新能源', 'CS新能车', '新能源TF值'],
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    animation: true,
+                    label: {
+                        backgroundColor: '#505765'
+                    }
+                }
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: xAxisDataZ,
+                }
+            ],
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    type: 'line',
+                    data: seriesDataZ,
+                    name: '中证新能源',
+                    // 因有缺失的点, 所以采用如下属性来使数据正常连接不断开
+                    connectNulls: true,
+                    showSymbol: false,
+                    // lineStyle: {
+                    //     color: 'rgba(138,0,255,0.3)',
+                    // },
+                },
+                {
+                    type: 'line',
+                    data: seriesDataCS,
+                    name: 'CS新能车',
+                    // 因有缺失的点, 所以采用如下属性来使数据正常连接不断开
+                    connectNulls: true,
+                    showSymbol: false,
+                },
+                {
+                    type: 'line',
+                    data: seriesDataTF,
+                    name: '新能源TF值',
+                    // 因有缺失的点, 所以采用如下属性来使数据正常连接不断开
+                    connectNulls: true,
+                    showSymbol: false,
+                    lineStyle: {
+                        color: 'rgba(138,0,255,0.3)',
+                    },
+                    markLine: {
+                        silent: true,
+                        lineStyle: {
+                            color: '#333'
+                        },
+                        data: [
+                            {
+                                yAxis: 50,
+                            },
+                        ]
+                    },
+                },
+            ],
+            dataZoom: [
+                {
+                    startValue: seriesDataTF[0][0],
+                },
+                {
+                    type: 'inside'
+                }
+            ],
+            toolbox: {
+                right: 10,
+                feature: {
+                    restore: {},
+                    saveAsImage: {}
+                }
+            },
+            visualMap: {
+                top: 50,
+                right: 0,
+                // seriesIndex: [0],
+                pieces: [
+                    {
+                        gt: 0,
+                        lte: 10,
+                        color: '#4BA37B'
+                    },
+                    {
+                        gt: 10,
+                        lte: 30,
+                        color: '#58C2C3'
+                    },
+                    {
+                        gt: 30,
+                        lte: 70,
+                        color: '#448EF8'
+                    },
+                    {
+                        gt: 70,
+                        lte: 90,
+                        color: '#EEB140'
+                    },
+                    {
+                        gt: 90,
+                        color: '#DF3E39'
+                    },
+                ],
+                outOfRange: {
+                    color: '#999'
+                }
+            },
+            grid: {
+                top: '20%',
+                containLabel: true
+            },
+
+            graphic: [{
+                type: 'group',// 组（可以包含图形、文字、图片）
+                left: 0,
+                top: 'top',
+                children: [{
+                    type: 'rect',
+                    z: 100,
+                    left: '0',
+                    top: '0',
+                    shape: {
+                        width: 200,
+                        height: 100,
+                    },
+                    style: {
+                        fill: 'transparent',
+                    }
+                },
+                    {
+                        type: 'text',// 文字
+                        z: 100,
+                        left: 45,
+                        top: 13,
+                        style: {
+                            fill: getColor(seriesDataZ[seriesDataZ.length - 1][1]),
+                            text: '中证新能源\t' + seriesDataZ[seriesDataZ.length - 1][1],
+                            font: '14px Microsoft YaHei',
+                        }
+                    },
+                    {
+                        type: 'text',
+                        z: 100,
+                        left: 45,
+                        top: 43,
+                        style: {
+                            fill: getColor(seriesDataCS[seriesDataCS.length - 1][1]),
+                            text: 'CS新能车\t' + seriesDataCS[seriesDataCS.length - 1][1],
+                            font: '14px Microsoft YaHei'
+                        }
+                    },
+                    {
+                        type: 'text',
+                        z: 100,
+                        left: 45,
+                        top: 73,
+                        style: {
+                            fill: getColor(seriesDataTF[seriesDataTF.length - 1][1]),
+                            text: '新能源TF值\t' + seriesDataTF[seriesDataTF.length - 1][1],
+                            font: '14px Microsoft YaHei'
+                        }
+                    },
+                ]
+            }]
+
+
+        };
+        myChart.setOption(option);
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="main" style="width: 1200px;height:600px;"></div>
+<script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.3.3/echarts.min.js"></script>
+
+<script>
+
+    var chartDom = document.getElementById('main');
+    var myChart = echarts.init(chartDom);
+    var option;
+
+    option = {
+        title: {
+            text: 'Rainfall and Flow Relationship',
+            left: 'center'
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'cross',
+                animation: true,
+                label: {
+                    backgroundColor: '#505765'
+                }
+            }
+        },
+        legend: {
+            data: ['Flow', 'Rainfall', 'Flow1'],
+            left: 10
+        },
+        xAxis: [
+            {
+                type: 'category',
+                // 两边留白
+                // boundaryGap: true,
+                // axisLine: { onZero: true },
+                axisTick: {
+                    alignWithLabel: true
+                },
+                data: ['1', '2', '3', '4'].map(function (str) {
+                    return str.replace(' ', '\n');
+                })
+            }
+        ],
+        yAxis: [
+            {
+                name: '百分比',
+                type: 'value'
+            },
+            {
+                name: '收益率',
+                nameLocation: 'start',
+                // 自动对齐
+                alignTicks: true,
+                type: 'value'
+                // inverse: true
+            },
+            {
+                type: 'value'
+            }
+        ],
+        series: [
+            {
+                name: 'Flow',
+                type: 'line',
+                emphasis: {
+                    focus: 'series'
+                },
+
+                // prettier-ignore
+                data: [
+                    90, 80, 100, 50
+                ]
+            },
+            {
+                name: 'Rainfall',
+                type: 'line',
+                yAxisIndex: 1,
+                data: [-0.4, 1, 1.2, -0.3]
+            },
+            {
+                name: 'Flow1',
+                type: 'line',
+
+                // prettier-ignore
+                data: [
+                    50, 80, 100, 50
+                ]
+            }
+        ]
+    };
+
+    option && myChart.setOption(option);
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>牛市贪婪指数</title>
+</head>
+<body>
+
+<div id="main" style="width: 1200px;height:600px;"></div>
+<script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.3.3/echarts.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+    var myChart = echarts.init(document.getElementById('main'));
+
+    <!--    axios设置header-->
+    var request = axios.create({});
+    // 后置
+    request.interceptors.response.use(function (response) {
+        // 对响应数据做点什么
+        return response.data;
+    }, function (error) {
+        // 对响应错误做点什么
+        return Promise.reject(error);
+    });
+</script>
+<script>
+    async function req(URL, data) {
+        var response = await request.post(URL, data);
+        return response;
+    }
+</script>
+<script>
+    <!--    万德全A -->
+    var xAxisData = [];
+    var seriesDataA = [];
+
+    async function wanDA() {
+        let URL = 'https://api.jiucaishuo.com/v2/guzhi/newtubiaolinedata';
+
+        let data = {
+            "gu_code": "881003.WI",
+            "pe_category": "pb",
+            "year": 5,
+            "ver": "new",
+            "type": "pc",
+            "data_source": "xichou",
+            "version": "2.0.0",
+            "authtoken": "fF1qu720kZQZf14E2zhhAgMFCpjuC/qW",
+            "act_time": +new Date(),
+            "tirgkjfs": "46",
+            "abiokytke": "d3",
+            "u54rg5d": "94",
+            "kf54ge7": "2",
+            "tiklsktr4": "6",
+            "lksytkjh": "18de",
+            "sbnoywr": "b1",
+            "bgd7h8tyu54": "2b",
+            "y654b5fs3tr": "6",
+            "bioduytlw": "f",
+            "bd4uy742": "8",
+            "h67456y": "c18",
+            "bvytikwqjk": "2b",
+            "ngd4uy551": "18",
+            "bgiuytkw": "de",
+            "nd354uy4752": "3",
+            "ghtoiutkmlg": "6dc",
+            "bd24y6421f": "16",
+            "tbvdiuytk": "c",
+            "ibvytiqjek": "b7",
+            "jnhf8u5231": "de",
+            "fjlkatj": "946",
+            "hy5641d321t": "68",
+            "iogojti": "6",
+            "ngd4yut78": "dc",
+            "nkjhrew": "8",
+            "yt447e13f": "5",
+            "n3bf4uj7y7": "8",
+            "nbf4uj7y432": "d3",
+            "yi854tew": "a3",
+            "h13ey474": "a32",
+            "quikgdky": "94"
+        };
+        let response = await req(URL, data);
+        let percent_list = response.data.percent_list;
+        for (let item in percent_list) {
+            percent_list[item] = parseFloat(percent_list[item]);
+        }
+        console.log(percent_list);
+        seriesDataA = Object.entries(percent_list);
+        xAxisData = Object.keys(percent_list);
+        console.log(xAxisData);
+        console.log(seriesDataA);
+    }
+
+
+</script>
+<script>
+    <!--    贪婪指数-->
+    var seriesDataTan = [];
+
+    async function tanLan() {
+        let URL = 'https://api.jiucaishuo.com/v2/kjtl/kjtlconnect';
+        let data = {
+            "gu_code": "000001.SH",
+            "type": "pc",
+            "data_source": "xichou",
+            "version": "2.0.0",
+            "authtoken": "fF1qu720kZQZf14E2zhhAgMFCpjuC/qW",
+            "act_time": +new Date(),
+            "tirgkjfs": "97",
+            "abiokytke": "95",
+            "u54rg5d": "70",
+            "kf54ge7": "8",
+            "tiklsktr4": "7",
+            "lksytkjh": "c918",
+            "sbnoywr": "f6",
+            "bgd7h8tyu54": "41",
+            "y654b5fs3tr": "5",
+            "bioduytlw": "5",
+            "bd4uy742": "c",
+            "h67456y": "3c9",
+            "bvytikwqjk": "41",
+            "ngd4uy551": "c9",
+            "bgiuytkw": "2e",
+            "nd354uy4752": "1",
+            "ghtoiutkmlg": "536",
+            "bd24y6421f": "61",
+            "tbvdiuytk": "3",
+            "ibvytiqjek": "49",
+            "jnhf8u5231": "2e",
+            "fjlkatj": "704",
+            "hy5641d321t": "1c",
+            "iogojti": "1",
+            "ngd4yut78": "36",
+            "nkjhrew": "c",
+            "yt447e13f": "6",
+            "n3bf4uj7y7": "9",
+            "nbf4uj7y432": "95",
+            "yi854tew": "31",
+            "h13ey474": "318",
+            "quikgdky": "54"
+        }
+        let response = await req(URL, data);
+        let datetime = response.data.xAxis.categories;
+        let seriesData = response.data.series[0].data;
+        //    合并
+        for (let i = 0; i < datetime.length; i++) {
+            seriesDataTan.push([datetime[i], seriesData[i]]);
+        }
+        console.log(seriesDataTan);
+    }
+</script>
+<script>
+    function getColor(value) {
+        if (value <= 10) {
+            return '#4BA37B';
+        } else if (value <= 30) {
+            return '#58C2C3';
+        } else if (value <= 70) {
+            return '#448EF8';
+        } else if (value <= 90) {
+            return '#EEB140';
+        } else {
+            return '#DF3E39';
+        }
+
+    }
+</script>
+<script>
+    Promise.all([wanDA(), tanLan()]).then(() => {
+        let option = {
+            title: {
+                text: `${seriesDataA[seriesDataA.length - 1][0]} 万得全A:${seriesDataA[seriesDataA.length - 1][1]}`,
+                link: 'https://funddb.cn/site/index',
+                textStyle: {
+                    color: getColor(seriesDataA[seriesDataA.length - 1][1]),
+                    fontSize: '16'
+                },
+                subtext: `${seriesDataTan[seriesDataTan.length - 1][0]} 贪婪指数:${seriesDataTan[seriesDataTan.length - 1][1]}`,
+                sublink: 'https://funddb.cn/tool/fear',
+                subtextStyle: {
+                    color: getColor(seriesDataTan[seriesDataTan.length - 1][1]),
+                    fontSize: '16',
+                    fontWeight: 'bold'
+                },
+
+            },
+            legend: {
+                name: ['万德全A', '贪婪指数'],
+            },
+            tooltip: {
+                trigger: 'axis',
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: xAxisData,
+                }
+            ],
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    type: 'line',
+                    data: seriesDataA,
+                    name: '万德全A',
+                    // 因有缺失的点, 所以采用如下属性来使数据正常连接不断开
+                    connectNulls: true,
+                    showSymbol: false,
+                    markLine: {
+                        silent: true,
+                        lineStyle: {
+                            color: '#333'
+                        },
+                        data: [
+                            {
+                                yAxis: 25
+                            },
+                            {
+                                yAxis: 75
+                            },
+                        ]
+                    },
+                },
+                {
+                    type: 'line',
+                    data: seriesDataTan,
+                    name: '贪婪指数',
+                    // 因有缺失的点, 所以采用如下属性来使数据正常连接不断开
+                    connectNulls: true,
+                    showSymbol: false,
+                    itemStyle: {
+                        color: 'rgba(255,70,150,0.18)'
+                    },
+                    // markLine: {
+                    //     silent: true,
+                    //     lineStyle: {
+                    //         color: '#333'
+                    //     },
+                    //     data: [
+                    //         {
+                    //             yAxis: 10
+                    //         },
+                    //         {
+                    //             yAxis: 30
+                    //         },
+                    //         {
+                    //             yAxis: 50
+                    //         },
+                    //         {
+                    //             yAxis: 70
+                    //         },
+                    //         {
+                    //             yAxis: 70
+                    //         },
+                    //                                 {
+                    //             yAxis: 90
+                    //         }
+                    //     ]
+                    // },
+                },
+            ],
+            visualMap: {
+                top: 50,
+                right: 0,
+                seriesIndex: [0],
+                pieces: [
+                    {
+                        gt: 0,
+                        lte: 10,
+                        color: '#4BA37B'
+                    },
+                    {
+                        gt: 10,
+                        lte: 30,
+                        color: '#58C2C3'
+                    },
+                    {
+                        gt: 30,
+                        lte: 70,
+                        color: '#448EF8'
+                    },
+                    {
+                        gt: 70,
+                        lte: 90,
+                        color: '#EEB140'
+                    },
+                    {
+                        gt: 90,
+                        color: '#DF3E39'
+                    },
+                ],
+                outOfRange: {
+                    color: '#999'
+                }
+            },
+            dataZoom: [
+                {
+                    startValue: seriesDataTan[0][0],
+                },
+                {
+                    type: 'inside'
+                }
+            ],
+            toolbox: {
+                right: 10,
+                feature: {
+                    restore: {},
+                    saveAsImage: {}
+                }
+            },
+
+
+        };
+        myChart.setOption(option);
+    });
+</script>
+</body>
+</html>

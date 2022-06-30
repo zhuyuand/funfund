@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>券商贪婪指数</title>
+</head>
+<body>
+
+<div id="main" style="width: 1200px;height:600px;"></div>
+<h3>券商Ⅱ(申万)</h3>
+<p>专门经营证券业务的机构，包括证券经纪、证券自营和证券承销</p>
+<h3>证券公司</h3>
+<p>
+    概要：中证全指细分行业指数系列以中证全指为样本空间，在全部25个中证二级行业、60余个三级行业中选择样本数量较多、市值代表性较强、流动性较好的行业进行指数编制，共包括20条二级行业指数，39条三级行业指数。同时根据市场需求，同期发布1条四级行业指数。中证全指细分行业指数系列能够更加精准的反映细分行业的表现，上述指数的发布将为行业指数系列ETF等产品的开发提供更多投资标的。
+    指数选样：中证全指细分行业指数样本空间由中证全指指数成份股组成。
+    选样方法：1、将样本空间股票按中证行业分类方法分类。2、如果行业内股票数量少于或等于50只，则全部股票构成相应全指行业指数的样本股。3、如果行业内股票数量多于50只，则分别按照股票的日均成交金额、日均总市值由高到低排名，剔除成交金额排名后10%、以及累积总市值占比达到98%以后的股票，并且保持剔除后股票数量不少于50只；行业内剩余股票构成相应行业指数的样本股。
+    样本调整：当中证全指指数调整成份股时，中证全指行业指数成份股随之进行相应调整。在成份公司有特殊事件发生，导致其行业归属发生变更时，将对中证全指行业指数成份股进行相应调整。
+</p>
+<script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.3.3/echarts.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+    var myChart = echarts.init(document.getElementById('main'));
+
+    <!--    axios设置header-->
+    var request = axios.create({});
+    // 后置
+    request.interceptors.response.use(function (response) {
+        // 对响应数据做点什么
+        return response.data;
+    }, function (error) {
+        // 对响应错误做点什么
+        return Promise.reject(error);
+    });
+</script>
+<script>
+    async function req(URL, data) {
+        var response = await request.post(URL, data);
+        return response;
+    }
+</script>
+<script>
+    <!--    券商Ⅱ(申万) -->
+    var xAxisDataZ = [];
+    var seriesDataZ = [];
+
+    async function zhongZ() {
+        let URL = 'https://api.jiucaishuo.com/v2/guzhi/newtubiaolinedata';
+
+        let data = {
+            "gu_code": "801193.SI",
+            "pe_category": "pb",
+            "year": 3,
+            "ver": "new",
+            "type": "pc",
+            "data_source": "xichou",
+            "version": "2.0.0",
+            "authtoken": "fF1qu720kZQZf14E2zhhAgMFCpjuC/qW",
+            "act_time": +new Date(),
+            "tirgkjfs": "a8",
+            "abiokytke": "5a",
+            "u54rg5d": "86",
+            "kf54ge7": "f",
+            "tiklsktr4": "8",
+            "lksytkjh": "b86c",
+            "sbnoywr": "86",
+            "bgd7h8tyu54": "6d",
+            "y654b5fs3tr": "c",
+            "bioduytlw": "3",
+            "bd4uy742": "6",
+            "h67456y": "6b8",
+            "bvytikwqjk": "6d",
+            "ngd4uy551": "b8",
+            "bgiuytkw": "f1",
+            "nd354uy4752": "9",
+            "ghtoiutkmlg": "c58",
+            "bd24y6421f": "63",
+            "tbvdiuytk": "6",
+            "ibvytiqjek": "df",
+            "jnhf8u5231": "f1",
+            "fjlkatj": "866",
+            "hy5641d321t": "36",
+            "iogojti": "3",
+            "ngd4yut78": "58",
+            "nkjhrew": "6",
+            "yt447e13f": "6",
+            "n3bf4uj7y7": "8",
+            "nbf4uj7y432": "5a",
+            "yi854tew": "09",
+            "h13ey474": "09f",
+            "quikgdky": "b3"
+        };
+        let response = await req(URL, data);
+        let percent_list = response.data.percent_list;
+        for (let item in percent_list) {
+            percent_list[item] = parseFloat(percent_list[item]);
+        }
+        console.log(percent_list);
+        seriesDataZ = Object.entries(percent_list);
+        xAxisDataZ = Object.keys(percent_list);
+        // console.log(xAxisDataZ,'xAxisDataZ');
+        console.log(seriesDataZ);
+    }
+
+
+</script>
+<script>
+    <!--    证券公司 -->
+    var seriesDataCS = [];
+
+    async function CS() {
+        let URL = 'https://api.jiucaishuo.com/v2/guzhi/newtubiaolinedata';
+
+        let data = {
+            "gu_code": "399975.SZ",
+            "pe_category": "pb",
+            "year": 3,
+            "ver": "new",
+            "type": "pc",
+            "data_source": "xichou",
+            "version": "2.0.0",
+            "authtoken": "fF1qu720kZQZf14E2zhhAgMFCpjuC/qW",
+            "act_time": +new Date(),
+            "tirgkjfs": "41",
+            "abiokytke": "a7",
+            "u54rg5d": "d3",
+            "kf54ge7": "3",
+            "tiklsktr4": "1",
+            "lksytkjh": "a05b",
+            "sbnoywr": "78",
+            "bgd7h8tyu54": "11",
+            "y654b5fs3tr": "7",
+            "bioduytlw": "e",
+            "bd4uy742": "7",
+            "h67456y": "ba0",
+            "bvytikwqjk": "11",
+            "ngd4uy551": "a0",
+            "bgiuytkw": "ba",
+            "nd354uy4752": "4",
+            "ghtoiutkmlg": "7b5",
+            "bd24y6421f": "84",
+            "tbvdiuytk": "b",
+            "ibvytiqjek": "31",
+            "jnhf8u5231": "ba",
+            "fjlkatj": "d3b",
+            "hy5641d321t": "47",
+            "iogojti": "4",
+            "ngd4yut78": "b5",
+            "nkjhrew": "7",
+            "yt447e13f": "0",
+            "n3bf4uj7y7": "0",
+            "nbf4uj7y432": "a7",
+            "yi854tew": "c4",
+            "h13ey474": "c43",
+            "quikgdky": "12"
+        };
+        let response = await req(URL, data);
+        let percent_list = response.data.percent_list;
+        for (let item in percent_list) {
+            percent_list[item] = parseFloat(percent_list[item]);
+        }
+        console.log(percent_list);
+        seriesDataCS = Object.entries(percent_list);
+        console.log(seriesDataCS);
+    }
+
+
+</script>
+<script>
+    <!--    券商PH值 -->
+    var seriesDataTF = [];
+
+    async function PH() {
+        let URL = 'https://api.jiucaishuo.com/v2/kjtlother/kjtlconnect';
+        let data = {
+            "kt_type": 3,
+            "type": "pc",
+            "data_source": "xichou",
+            "version": "2.0.0",
+            "authtoken": "fF1qu720kZQZf14E2zhhAgMFCpjuC/qW",
+            "act_time": +new Date(),
+            "tirgkjfs": "f4",
+            "abiokytke": "b6",
+            "u54rg5d": "b5",
+            "kf54ge7": "b",
+            "tiklsktr4": "4",
+            "lksytkjh": "935e",
+            "sbnoywr": "7d",
+            "bgd7h8tyu54": "ea",
+            "y654b5fs3tr": "f",
+            "bioduytlw": "f",
+            "bd4uy742": "b",
+            "h67456y": "493",
+            "bvytikwqjk": "ea",
+            "ngd4uy551": "93",
+            "bgiuytkw": "5b",
+            "nd354uy4752": "f",
+            "ghtoiutkmlg": "f44",
+            "bd24y6421f": "d9",
+            "tbvdiuytk": "4",
+            "ibvytiqjek": "56",
+            "jnhf8u5231": "5b",
+            "fjlkatj": "b56",
+            "hy5641d321t": "9b",
+            "iogojti": "9",
+            "ngd4yut78": "44",
+            "nkjhrew": "b",
+            "yt447e13f": "e",
+            "n3bf4uj7y7": "3",
+            "nbf4uj7y432": "b6",
+            "yi854tew": "cf",
+            "h13ey474": "cfb",
+            "quikgdky": "d5"
+        };
+        let response = await req(URL, data);
+        let datetime = response.data.xAxis.categories;
+        let seriesData = response.data.series[0].data;
+        //    合并
+        for (let i = 0; i < datetime.length; i++) {
+            seriesDataTF.push([datetime[i], seriesData[i]]);
+        }
+        console.log(seriesDataTF, 'seriesDataTF');
+    }
+</script>
+<script>
+    function getColor(value) {
+        if (value <= 10) {
+            return '#4BA37B';
+        } else if (value <= 30) {
+            return '#58C2C3';
+        } else if (value <= 70) {
+            return '#448EF8';
+        } else if (value <= 90) {
+            return '#EEB140';
+        } else {
+            return '#DF3E39';
+        }
+
+    }
+</script>
+<script>
+    Promise.all([zhongZ(), CS(), PH()]).then(() => {
+        let option = {
+            legend: {
+                name: ['券商Ⅱ(申万)', '证券公司', '券商PH值'],
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    animation: true,
+                    label: {
+                        backgroundColor: '#505765'
+                    }
+                }
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: xAxisDataZ,
+                }
+            ],
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    type: 'line',
+                    data: seriesDataZ,
+                    name: '券商Ⅱ(申万)',
+                    // 因有缺失的点, 所以采用如下属性来使数据正常连接不断开
+                    connectNulls: true,
+                    showSymbol: false,
+                    // lineStyle: {
+                    //     color: 'rgba(138,0,255,0.3)',
+                    // },
+                },
+                {
+                    type: 'line',
+                    data: seriesDataCS,
+                    name: '证券公司',
+                    // 因有缺失的点, 所以采用如下属性来使数据正常连接不断开
+                    connectNulls: true,
+                    showSymbol: false,
+                },
+                {
+                    type: 'line',
+                    data: seriesDataTF,
+                    name: '券商PH值',
+                    // 因有缺失的点, 所以采用如下属性来使数据正常连接不断开
+                    connectNulls: true,
+                    showSymbol: false,
+                    lineStyle: {
+                        color: 'rgba(138,0,255,0.3)',
+                    },
+                },
+            ],
+            dataZoom: [
+                {
+                    startValue: seriesDataTF[0][0],
+                },
+                {
+                    type: 'inside'
+                }
+            ],
+            toolbox: {
+                right: 10,
+                feature: {
+                    restore: {},
+                    saveAsImage: {}
+                }
+            },
+            visualMap: {
+                top: 50,
+                right: 0,
+                // seriesIndex: [0],
+                pieces: [
+                    {
+                        gt: 0,
+                        lte: 10,
+                        color: '#4BA37B'
+                    },
+                    {
+                        gt: 10,
+                        lte: 30,
+                        color: '#58C2C3'
+                    },
+                    {
+                        gt: 30,
+                        lte: 70,
+                        color: '#448EF8'
+                    },
+                    {
+                        gt: 70,
+                        lte: 90,
+                        color: '#EEB140'
+                    },
+                    {
+                        gt: 90,
+                        color: '#DF3E39'
+                    },
+                ],
+                outOfRange: {
+                    color: '#999'
+                }
+            },
+            grid: {
+                top: '20%',
+                containLabel: true
+            },
+
+            graphic: [{
+                type: 'group',// 组（可以包含图形、文字、图片）
+                left: 0,
+                top: 'top',
+                children: [{
+                    type: 'rect',
+                    z: 100,
+                    left: '0',
+                    top: '0',
+                    shape: {
+                        width: 200,
+                        height: 100,
+                    },
+                    style: {
+                        fill: 'transparent',
+                    }
+                },
+                    {
+                        type: 'text',// 文字
+                        z: 100,
+                        left: 45,
+                        top: 13,
+                        style: {
+                            fill: getColor(seriesDataZ[seriesDataZ.length - 1][1]),
+                            text: ' 券商Ⅱ(申万)\t' + seriesDataZ[seriesDataZ.length - 1][1],
+                            font: '14px Microsoft YaHei',
+                        }
+                    },
+                    {
+                        type: 'text',
+                        z: 100,
+                        left: 45,
+                        top: 43,
+                        style: {
+                            fill: getColor(seriesDataCS[seriesDataCS.length - 1][1]),
+                            text: '证券公司\t' + seriesDataCS[seriesDataCS.length - 1][1],
+                            font: '14px Microsoft YaHei'
+                        }
+                    },
+                    {
+                        type: 'text',
+                        z: 100,
+                        left: 45,
+                        top: 73,
+                        style: {
+                            fill: getColor(seriesDataTF[seriesDataTF.length - 1][1]),
+                            text: '券商PH值\t' + seriesDataTF[seriesDataTF.length - 1][1],
+                            font: '14px Microsoft YaHei'
+                        }
+                    },
+                ]
+            }]
+
+
+        };
+        myChart.setOption(option);
+    });
+</script>
+</body>
+</html>

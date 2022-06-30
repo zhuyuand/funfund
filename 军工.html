@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>军工贪婪指数</title>
+</head>
+<body>
+
+<div id="main" style="width: 1200px;height:600px;"></div>
+<h3>中证国防</h3>
+<p>中证国防指数是从隶属于十大军工集团公司旗下的上市公司，以及为国家武装力量提供武器装备，或与军方有实际装备承制销售金额或签订合同的相关上市公司中选取不超过50只股票作为样本股。
+    指数基日与基点：该指数以2011年6月30日为基日，以该日收盘后所有样本股的调整市值为基期，以1000点为基点。 样本空间：以中证全指为样本空间
+    选样方法：首先，在中证全指样本空间内，按照过去一年日均成交金额由高到低排名，剔除流动性排名后20%的股票；其次，将如下上市公司作为国防主题样本：隶属于国防工业系统下的十大集团公司旗下的上市公司；十大集团公司以外的为国家武装力量提供武器装备的上市公司;与军方有实际的装备承制销售金额或签订合同的相关上市公司。最后，按照过去一年日均总市值由高到低排名，选取不超过50只股票构成中证国防指数样本股。
+    样本股调整：中证国防指数每半年定期审核一次样本股，并根据审核结果调整指数样本股。样本股调整实施时间为每年6月和12月的第二个星期五收盘后的下一交易日。当样本股公司有特殊事件发生，以致影响指数代表性和可投资性时，对指数样本股进行相应调整。</p>
+<h3>国防军工(申万)</h3>
+<p>
+    申银万国行业股价系列指数以申银万国行业分类标准为基础编制的分行业股价指数，表征不同行业平均股价变化。
+</p>
+<script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.3.3/echarts.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+    var myChart = echarts.init(document.getElementById('main'));
+
+    <!--    axios设置header-->
+    var request = axios.create({});
+    // 后置
+    request.interceptors.response.use(function (response) {
+        // 对响应数据做点什么
+        return response.data;
+    }, function (error) {
+        // 对响应错误做点什么
+        return Promise.reject(error);
+    });
+</script>
+<script>
+    async function req(URL, data) {
+        var response = await request.post(URL, data);
+        return response;
+    }
+</script>
+<script>
+    <!--    国防军工(申万) -->
+    var xAxisDataZ = [];
+    var seriesDataZ = [];
+
+    async function zhongZ() {
+        let URL = 'https://api.jiucaishuo.com/v2/guzhi/newtubiaolinedata';
+
+        let data = {
+            "gu_code": "801740.SI",
+            "pe_category": "pb",
+            "year": 3,
+            "ver": "new",
+            "type": "pc",
+            "data_source": "xichou",
+            "version": "2.0.0",
+            "authtoken": "fF1qu720kZQZf14E2zhhAgMFCpjuC/qW",
+            "act_time": +new Date(),
+            "tirgkjfs": "78",
+            "abiokytke": "84",
+            "u54rg5d": "e2",
+            "kf54ge7": "8",
+            "tiklsktr4": "8",
+            "lksytkjh": "33ff",
+            "sbnoywr": "c8",
+            "bgd7h8tyu54": "7f",
+            "y654b5fs3tr": "1",
+            "bioduytlw": "6",
+            "bd4uy742": "a",
+            "h67456y": "e33",
+            "bvytikwqjk": "7f",
+            "ngd4uy551": "33",
+            "bgiuytkw": "ff",
+            "nd354uy4752": "a",
+            "ghtoiutkmlg": "1fc",
+            "bd24y6421f": "89",
+            "tbvdiuytk": "e",
+            "ibvytiqjek": "e9",
+            "jnhf8u5231": "ff",
+            "fjlkatj": "e2c",
+            "hy5641d321t": "9a",
+            "iogojti": "9",
+            "ngd4yut78": "fc",
+            "nkjhrew": "a",
+            "yt447e13f": "f",
+            "n3bf4uj7y7": "3",
+            "nbf4uj7y432": "84",
+            "yi854tew": "4a",
+            "h13ey474": "4a8",
+            "quikgdky": "10"
+        };
+        let response = await req(URL, data);
+        let percent_list = response.data.percent_list;
+        for (let item in percent_list) {
+            percent_list[item] = parseFloat(percent_list[item]);
+        }
+        console.log(percent_list);
+        seriesDataZ = Object.entries(percent_list);
+        xAxisDataZ = Object.keys(percent_list);
+        // console.log(xAxisDataZ,'xAxisDataZ');
+        console.log(seriesDataZ);
+    }
+
+
+</script>
+<script>
+    <!--    中证国防 -->
+    var seriesDataCS = [];
+
+    async function CS() {
+        let URL = 'https://api.jiucaishuo.com/v2/guzhi/newtubiaolinedata';
+
+        let data = {
+            "gu_code": "399973.SZ",
+            "pe_category": "pb",
+            "year": 3,
+            "ver": "new",
+            "type": "pc",
+            "data_source": "xichou",
+            "version": "2.0.0",
+            "authtoken": "fF1qu720kZQZf14E2zhhAgMFCpjuC/qW",
+            "act_time": +new Date(),
+            "tirgkjfs": "0a",
+            "abiokytke": "5e",
+            "u54rg5d": "10",
+            "kf54ge7": "5",
+            "tiklsktr4": "a",
+            "lksytkjh": "ce6b",
+            "sbnoywr": "68",
+            "bgd7h8tyu54": "60",
+            "y654b5fs3tr": "8",
+            "bioduytlw": "c",
+            "bd4uy742": "1",
+            "h67456y": "dce",
+            "bvytikwqjk": "60",
+            "ngd4uy551": "ce",
+            "bgiuytkw": "2b",
+            "nd354uy4752": "6",
+            "ghtoiutkmlg": "868",
+            "bd24y6421f": "8e",
+            "tbvdiuytk": "d",
+            "ibvytiqjek": "8d",
+            "jnhf8u5231": "2b",
+            "fjlkatj": "107",
+            "hy5641d321t": "e1",
+            "iogojti": "e",
+            "ngd4yut78": "68",
+            "nkjhrew": "1",
+            "yt447e13f": "a",
+            "n3bf4uj7y7": "e",
+            "nbf4uj7y432": "5e",
+            "yi854tew": "16",
+            "h13ey474": "165",
+            "quikgdky": "79"
+        };
+        let response = await req(URL, data);
+        let percent_list = response.data.percent_list;
+        for (let item in percent_list) {
+            percent_list[item] = parseFloat(percent_list[item]);
+        }
+        console.log(percent_list);
+        seriesDataCS = Object.entries(percent_list);
+        console.log(seriesDataCS);
+    }
+
+
+</script>
+<script>
+    <!--    军工PH值 -->
+    var seriesDataTF = [];
+
+    async function PH() {
+        let URL = 'https://api.jiucaishuo.com/v2/kjtlother/kjtlconnect';
+        let data = {
+            "kt_type": 2,
+            "type": "pc",
+            "data_source": "xichou",
+            "version": "2.0.0",
+            "authtoken": "fF1qu720kZQZf14E2zhhAgMFCpjuC/qW",
+            "act_time": +new Date(),
+            "tirgkjfs": "4d",
+            "abiokytke": "46",
+            "u54rg5d": "d0",
+            "kf54ge7": "d",
+            "tiklsktr4": "d",
+            "lksytkjh": "ef27",
+            "sbnoywr": "a1",
+            "bgd7h8tyu54": "e5",
+            "y654b5fs3tr": "f",
+            "bioduytlw": "8",
+            "bd4uy742": "4",
+            "h67456y": "1ef",
+            "bvytikwqjk": "e5",
+            "ngd4uy551": "ef",
+            "bgiuytkw": "99",
+            "nd354uy4752": "f",
+            "ghtoiutkmlg": "fef",
+            "bd24y6421f": "19",
+            "tbvdiuytk": "1",
+            "ibvytiqjek": "7a",
+            "jnhf8u5231": "99",
+            "fjlkatj": "d04",
+            "hy5641d321t": "94",
+            "iogojti": "9",
+            "ngd4yut78": "ef",
+            "nkjhrew": "4",
+            "yt447e13f": "9",
+            "n3bf4uj7y7": "f",
+            "nbf4uj7y432": "46",
+            "yi854tew": "bf",
+            "h13ey474": "bfd",
+            "quikgdky": "11"
+        };
+        let response = await req(URL, data);
+        let datetime = response.data.xAxis.categories;
+        let seriesData = response.data.series[0].data;
+        //    合并
+        for (let i = 0; i < datetime.length; i++) {
+            seriesDataTF.push([datetime[i], seriesData[i]]);
+        }
+        console.log(seriesDataTF, 'seriesDataTF');
+    }
+</script>
+<script>
+    function getColor(value) {
+        if (value <= 10) {
+            return '#4BA37B';
+        } else if (value <= 30) {
+            return '#58C2C3';
+        } else if (value <= 70) {
+            return '#448EF8';
+        } else if (value <= 90) {
+            return '#EEB140';
+        } else {
+            return '#DF3E39';
+        }
+
+    }
+</script>
+<script>
+    Promise.all([zhongZ(), CS(), PH()]).then(() => {
+        let option = {
+            legend: {
+                name: ['国防军工(申万)', '中证国防', '军工PH值'],
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    animation: true,
+                    label: {
+                        backgroundColor: '#505765'
+                    }
+                }
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: xAxisDataZ,
+                }
+            ],
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    type: 'line',
+                    data: seriesDataZ,
+                    name: '国防军工(申万)',
+                    // 因有缺失的点, 所以采用如下属性来使数据正常连接不断开
+                    connectNulls: true,
+                    showSymbol: false,
+                    // lineStyle: {
+                    //     color: 'rgba(138,0,255,0.3)',
+                    // },
+                },
+                {
+                    type: 'line',
+                    data: seriesDataCS,
+                    name: '中证国防',
+                    // 因有缺失的点, 所以采用如下属性来使数据正常连接不断开
+                    connectNulls: true,
+                    showSymbol: false,
+                },
+                {
+                    type: 'line',
+                    data: seriesDataTF,
+                    name: '军工PH值',
+                    // 因有缺失的点, 所以采用如下属性来使数据正常连接不断开
+                    connectNulls: true,
+                    showSymbol: false,
+                    lineStyle: {
+                        color: 'rgba(138,0,255,0.3)',
+                    },
+                    markLine: {
+                        silent: true,
+                        lineStyle: {
+                            color: '#333'
+                        },
+                        data: [
+                            {
+                                yAxis: 50,
+                            },
+                        ]
+                    },
+                },
+            ],
+            dataZoom: [
+                {
+                    startValue: seriesDataTF[0][0],
+                },
+                {
+                    type: 'inside'
+                }
+            ],
+            toolbox: {
+                right: 10,
+                feature: {
+                    restore: {},
+                    saveAsImage: {}
+                }
+            },
+            visualMap: {
+                top: 50,
+                right: 0,
+                // seriesIndex: [0],
+                pieces: [
+                    {
+                        gt: 0,
+                        lte: 10,
+                        color: '#4BA37B'
+                    },
+                    {
+                        gt: 10,
+                        lte: 30,
+                        color: '#58C2C3'
+                    },
+                    {
+                        gt: 30,
+                        lte: 70,
+                        color: '#448EF8'
+                    },
+                    {
+                        gt: 70,
+                        lte: 90,
+                        color: '#EEB140'
+                    },
+                    {
+                        gt: 90,
+                        color: '#DF3E39'
+                    },
+                ],
+                outOfRange: {
+                    color: '#999'
+                }
+            },
+            grid: {
+                top: '20%',
+                containLabel: true
+            },
+
+            graphic: [{
+                type: 'group',// 组（可以包含图形、文字、图片）
+                left: 0,
+                top: 'top',
+                children: [{
+                    type: 'rect',
+                    z: 100,
+                    left: '0',
+                    top: '0',
+                    shape: {
+                        width: 200,
+                        height: 100,
+                    },
+                    style: {
+                        fill: 'transparent',
+                    }
+                },
+                    {
+                        type: 'text',// 文字
+                        z: 100,
+                        left: 45,
+                        top: 13,
+                        style: {
+                            fill: getColor(seriesDataZ[seriesDataZ.length - 1][1]),
+                            text: '国防军工(申万)\t' + seriesDataZ[seriesDataZ.length - 1][1],
+                            font: '14px Microsoft YaHei',
+                        }
+                    },
+                    {
+                        type: 'text',
+                        z: 100,
+                        left: 45,
+                        top: 43,
+                        style: {
+                            fill: getColor(seriesDataCS[seriesDataCS.length - 1][1]),
+                            text: '中证国防\t' + seriesDataCS[seriesDataCS.length - 1][1],
+                            font: '14px Microsoft YaHei'
+                        }
+                    },
+                    {
+                        type: 'text',
+                        z: 100,
+                        left: 45,
+                        top: 73,
+                        style: {
+                            fill: getColor(seriesDataTF[seriesDataTF.length - 1][1]),
+                            text: '军工PH值\t' + seriesDataTF[seriesDataTF.length - 1][1],
+                            font: '14px Microsoft YaHei'
+                        },
+
+                    },
+                ]
+            }]
+
+
+        };
+        myChart.setOption(option);
+    });
+</script>
+</body>
+</html>

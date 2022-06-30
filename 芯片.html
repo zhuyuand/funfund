@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>芯片贪婪指数</title>
+</head>
+<body>
+
+<div id="main" style="width: 1200px;height:600px;"></div>
+
+<script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.3.3/echarts.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+    var myChart = echarts.init(document.getElementById('main'));
+
+    <!--    axios设置header-->
+    var request = axios.create({});
+    // 后置
+    request.interceptors.response.use(function (response) {
+        // 对响应数据做点什么
+        return response.data;
+    }, function (error) {
+        // 对响应错误做点什么
+        return Promise.reject(error);
+    });
+</script>
+<script>
+    async function req(URL, data) {
+        var response = await request.post(URL, data);
+        return response;
+    }
+</script>
+<script>
+    <!--    中证全指半导体 -->
+    var xAxisDataZ = [];
+    var seriesDataZ = [];
+
+    async function zhongZ() {
+        let URL = 'https://api.jiucaishuo.com/v2/guzhi/newtubiaolinedata';
+
+        let data = {
+            "gu_code": "h30184.CSI",
+            "pe_category": "pb",
+            "year": 3,
+            "ver": "new",
+            "type": "pc",
+            "data_source": "xichou",
+            "version": "2.0.0",
+            "authtoken": "fF1qu720kZQZf14E2zhhAgMFCpjuC/qW",
+            "act_time": +new Date(),
+            "tirgkjfs": "e4",
+            "abiokytke": "64",
+            "u54rg5d": "c5",
+            "kf54ge7": "0",
+            "tiklsktr4": "4",
+            "lksytkjh": "2d4c",
+            "sbnoywr": "9e",
+            "bgd7h8tyu54": "fb",
+            "y654b5fs3tr": "2",
+            "bioduytlw": "d",
+            "bd4uy742": "6",
+            "h67456y": "e2d",
+            "bvytikwqjk": "fb",
+            "ngd4uy551": "2d",
+            "bgiuytkw": "37",
+            "nd354uy4752": "3",
+            "ghtoiutkmlg": "281",
+            "bd24y6421f": "e4",
+            "tbvdiuytk": "e",
+            "ibvytiqjek": "84",
+            "jnhf8u5231": "37",
+            "fjlkatj": "c5b",
+            "hy5641d321t": "46",
+            "iogojti": "4",
+            "ngd4yut78": "81",
+            "nkjhrew": "6",
+            "yt447e13f": "5",
+            "n3bf4uj7y7": "d",
+            "nbf4uj7y432": "64",
+            "yi854tew": "03",
+            "h13ey474": "030",
+            "quikgdky": "af"
+        };
+        let response = await req(URL, data);
+        let percent_list = response.data.percent_list;
+        for (let item in percent_list) {
+            percent_list[item] = parseFloat(percent_list[item]);
+        }
+        console.log(percent_list);
+        seriesDataZ = Object.entries(percent_list);
+        xAxisDataZ = Object.keys(percent_list);
+        // console.log(xAxisDataZ,'xAxisDataZ');
+        console.log(seriesDataZ);
+    }
+
+
+</script>
+<script>
+    <!--    半导体(申万) -->
+    var seriesDataCS = [];
+
+    async function CS() {
+        let URL = 'https://api.jiucaishuo.com/v2/guzhi/newtubiaolinedata';
+
+        let data = {
+            "gu_code": "801081.SI",
+            "pe_category": "pb",
+            "year": 3,
+            "ver": "new",
+            "type": "pc",
+            "data_source": "xichou",
+            "version": "2.0.0",
+            "authtoken": "fF1qu720kZQZf14E2zhhAgMFCpjuC/qW",
+            "act_time": +new Date(),
+            "tirgkjfs": "ea",
+            "abiokytke": "48",
+            "u54rg5d": "28",
+            "kf54ge7": "9",
+            "tiklsktr4": "a",
+            "lksytkjh": "0e69",
+            "sbnoywr": "2d",
+            "bgd7h8tyu54": "35",
+            "y654b5fs3tr": "3",
+            "bioduytlw": "b",
+            "bd4uy742": "9",
+            "h67456y": "70e",
+            "bvytikwqjk": "35",
+            "ngd4uy551": "0e",
+            "bgiuytkw": "e6",
+            "nd354uy4752": "1",
+            "ghtoiutkmlg": "377",
+            "bd24y6421f": "d9",
+            "tbvdiuytk": "7",
+            "ibvytiqjek": "3a",
+            "jnhf8u5231": "e6",
+            "fjlkatj": "289",
+            "hy5641d321t": "99",
+            "iogojti": "9",
+            "ngd4yut78": "77",
+            "nkjhrew": "9",
+            "yt447e13f": "a",
+            "n3bf4uj7y7": "e",
+            "nbf4uj7y432": "48",
+            "yi854tew": "71",
+            "h13ey474": "719",
+            "quikgdky": "9b"
+        };
+        let response = await req(URL, data);
+        let percent_list = response.data.percent_list;
+        for (let item in percent_list) {
+            percent_list[item] = parseFloat(percent_list[item]);
+        }
+        console.log(percent_list);
+        seriesDataCS = Object.entries(percent_list);
+        console.log(seriesDataCS);
+    }
+
+
+</script>
+<script>
+    <!--    心动值 -->
+    var seriesDataTF = [];
+
+    async function PH() {
+        let URL = 'https://api.jiucaishuo.com/v2/kjtlother/kjtlconnect';
+        let data = {
+            "kt_type": 5,
+            "type": "pc",
+            "data_source": "xichou",
+            "version": "2.0.0",
+            "authtoken": "fF1qu720kZQZf14E2zhhAgMFCpjuC/qW",
+            "act_time": +new Date(),
+            "tirgkjfs": "21",
+            "abiokytke": "60",
+            "u54rg5d": "8e",
+            "kf54ge7": "5",
+            "tiklsktr4": "1",
+            "lksytkjh": "9a83",
+            "sbnoywr": "c3",
+            "bgd7h8tyu54": "1e",
+            "y654b5fs3tr": "0",
+            "bioduytlw": "0",
+            "bd4uy742": "f",
+            "h67456y": "49a",
+            "bvytikwqjk": "1e",
+            "ngd4uy551": "9a",
+            "bgiuytkw": "7e",
+            "nd354uy4752": "5",
+            "ghtoiutkmlg": "0e2",
+            "bd24y6421f": "36",
+            "tbvdiuytk": "4",
+            "ibvytiqjek": "6d",
+            "jnhf8u5231": "7e",
+            "fjlkatj": "8ef",
+            "hy5641d321t": "6f",
+            "iogojti": "6",
+            "ngd4yut78": "e2",
+            "nkjhrew": "f",
+            "yt447e13f": "a",
+            "n3bf4uj7y7": "a",
+            "nbf4uj7y432": "60",
+            "yi854tew": "e5",
+            "h13ey474": "e55",
+            "quikgdky": "76"
+        };
+        let response = await req(URL, data);
+        let datetime = response.data.xAxis.categories;
+        let seriesData = response.data.series[0].data;
+        //    合并
+        for (let i = 0; i < datetime.length; i++) {
+            seriesDataTF.push([datetime[i], seriesData[i]]);
+        }
+        console.log(seriesDataTF, 'seriesDataTF');
+    }
+</script>
+<script>
+    function getColor(value) {
+        if (value <= 10) {
+            return '#4BA37B';
+        } else if (value <= 30) {
+            return '#58C2C3';
+        } else if (value <= 70) {
+            return '#448EF8';
+        } else if (value <= 90) {
+            return '#EEB140';
+        } else {
+            return '#DF3E39';
+        }
+
+    }
+</script>
+<script>
+    Promise.all([zhongZ(), CS(), PH()]).then(() => {
+        let option = {
+            title: {
+                text: '芯片指数',
+                left: 'center',
+                top: 'top',
+                textStyle: {
+                    color: 'transparent',
+                    fontSize: '14',
+                    fontWeight: 'normal'
+                }
+            },
+            legend: {
+                name: ['中证全指半导体', '半导体(申万)', '芯动值'],
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    animation: true,
+                    label: {
+                        backgroundColor: '#505765'
+                    }
+                }
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: xAxisDataZ,
+                }
+            ],
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    type: 'line',
+                    data: seriesDataZ,
+                    name: '中证全指半导体',
+                    // 因有缺失的点, 所以采用如下属性来使数据正常连接不断开
+                    connectNulls: true,
+                    showSymbol: false,
+                },
+                {
+                    type: 'line',
+                    data: seriesDataCS,
+                    name: '半导体(申万)',
+                    // 因有缺失的点, 所以采用如下属性来使数据正常连接不断开
+                    connectNulls: true,
+                    showSymbol: false,
+                },
+                {
+                    type: 'line',
+                    data: seriesDataTF,
+                    name: '芯动值',
+                    // 因有缺失的点, 所以采用如下属性来使数据正常连接不断开
+                    connectNulls: true,
+                    showSymbol: false,
+                    lineStyle: {
+                        color: 'rgba(138,0,255,0.3)',
+                    },
+                },
+            ],
+            dataZoom: [
+                {
+                    startValue: seriesDataTF[0][0],
+                },
+                {
+                    type: 'inside'
+                }
+            ],
+            toolbox: {
+                right: 10,
+                feature: {
+                    restore: {},
+                    saveAsImage: {}
+                }
+            },
+            visualMap: {
+                top: 50,
+                right: 0,
+                // seriesIndex: [0],
+                pieces: [
+                    {
+                        gt: 0,
+                        lte: 10,
+                        color: '#4BA37B'
+                    },
+                    {
+                        gt: 10,
+                        lte: 30,
+                        color: '#58C2C3'
+                    },
+                    {
+                        gt: 30,
+                        lte: 70,
+                        color: '#448EF8'
+                    },
+                    {
+                        gt: 70,
+                        lte: 90,
+                        color: '#EEB140'
+                    },
+                    {
+                        gt: 90,
+                        color: '#DF3E39'
+                    },
+                ],
+                outOfRange: {
+                    color: '#999'
+                }
+            },
+            grid: {
+                top: '20%',
+                containLabel: true
+            },
+
+            graphic: [{
+                type: 'group',// 组（可以包含图形、文字、图片）
+                left: 0,
+                top: 'top',
+                children: [{
+                    type: 'rect',
+                    z: 100,
+                    left: '0',
+                    top: '0',
+                    shape: {
+                        width: 200,
+                        height: 100,
+                    },
+                    style: {
+                        fill: 'transparent',
+                    }
+                },
+                    {
+                        type: 'text',// 文字
+                        z: 100,
+                        left: 45,
+                        top: 13,
+                        style: {
+                            fill: getColor(seriesDataZ[seriesDataZ.length - 1][1]),
+                            text: '中证全指半导体\t' + seriesDataZ[seriesDataZ.length - 1][1],
+                            font: '14px Microsoft YaHei',
+                        }
+                    },
+                    {
+                        type: 'text',
+                        z: 100,
+                        left: 45,
+                        top: 43,
+                        style: {
+                            fill: getColor(seriesDataCS[seriesDataCS.length - 1][1]),
+                            text: '半导体(申万)\t' + seriesDataCS[seriesDataCS.length - 1][1],
+                            font: '14px Microsoft YaHei'
+                        }
+                    },
+                    {
+                        type: 'text',
+                        z: 100,
+                        left: 45,
+                        top: 73,
+                        style: {
+                            fill: getColor(seriesDataTF[seriesDataTF.length - 1][1]),
+                            text: '芯动值\t' + seriesDataTF[seriesDataTF.length - 1][1],
+                            font: '14px Microsoft YaHei'
+                        }
+                    },
+                ]
+            }]
+
+
+        };
+        myChart.setOption(option);
+    });
+</script>
+</body>
+</html>

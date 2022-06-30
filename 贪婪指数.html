@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>贪婪指数</title>
+</head>
+<body>
+
+<div id="main" style="width: 1200px;height:600px;"></div>
+<script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.3.3/echarts.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+    var myChart = echarts.init(document.getElementById('main'));
+
+    <!--    axios设置header-->
+    var request = axios.create({});
+    // 后置
+    request.interceptors.response.use(function (response) {
+        // 对响应数据做点什么
+        return response.data;
+    }, function (error) {
+        // 对响应错误做点什么
+        return Promise.reject(error);
+    });
+</script>
+<script>
+    async function req(URL, data) {
+        var response = await request.post(URL, data);
+        return response;
+    }
+</script>
+<script>
+    <!--    万得全A(除金融、石油石化) -->
+    var xAxisDataZ = [];
+    var seriesDataZ = [];
+
+    async function zhongZ() {
+        let URL = 'https://api.jiucaishuo.com/v2/guzhi/newtubiaolinedata';
+
+        let data = {
+            "gu_code": "881003.WI",
+            "pe_category": "pb",
+            "year": 3,
+            "ver": "new",
+            "type": "pc",
+            "data_source": "xichou",
+            "version": "2.0.0",
+            "authtoken": "fF1qu720kZQZf14E2zhhAgMFCpjuC/qW",
+            "act_time": +new Date(),
+            "tirgkjfs": "46",
+            "abiokytke": "d3",
+            "u54rg5d": "94",
+            "kf54ge7": "2",
+            "tiklsktr4": "6",
+            "lksytkjh": "18de",
+            "sbnoywr": "b1",
+            "bgd7h8tyu54": "2b",
+            "y654b5fs3tr": "6",
+            "bioduytlw": "f",
+            "bd4uy742": "8",
+            "h67456y": "c18",
+            "bvytikwqjk": "2b",
+            "ngd4uy551": "18",
+            "bgiuytkw": "de",
+            "nd354uy4752": "3",
+            "ghtoiutkmlg": "6dc",
+            "bd24y6421f": "16",
+            "tbvdiuytk": "c",
+            "ibvytiqjek": "b7",
+            "jnhf8u5231": "de",
+            "fjlkatj": "946",
+            "hy5641d321t": "68",
+            "iogojti": "6",
+            "ngd4yut78": "dc",
+            "nkjhrew": "8",
+            "yt447e13f": "5",
+            "n3bf4uj7y7": "8",
+            "nbf4uj7y432": "d3",
+            "yi854tew": "a3",
+            "h13ey474": "a32",
+            "quikgdky": "94"
+        };
+        let response = await req(URL, data);
+        let percent_list = response.data.percent_list;
+        for (let item in percent_list) {
+            percent_list[item] = parseFloat(percent_list[item]);
+        }
+        console.log(percent_list);
+        seriesDataZ = Object.entries(percent_list);
+        xAxisDataZ = Object.keys(percent_list);
+        // console.log(xAxisDataZ,'xAxisDataZ');
+        console.log(seriesDataZ);
+    }
+
+
+</script>
+<script>
+    <!--    中证全指  -->
+    var seriesDataCS = [];
+
+    async function CS() {
+        let URL = 'https://api.jiucaishuo.com/v2/guzhi/newtubiaolinedata';
+
+        let data = {
+            "gu_code": "000985.CSI",
+            "pe_category": "pb",
+            "year": 3,
+            "ver": "new",
+            "type": "pc",
+            "data_source": "xichou",
+            "version": "2.0.0",
+            "authtoken": "fF1qu720kZQZf14E2zhhAgMFCpjuC/qW",
+            "act_time": +new Date(),
+            "tirgkjfs": "10",
+            "abiokytke": "67",
+            "u54rg5d": "04",
+            "kf54ge7": "2",
+            "tiklsktr4": "0",
+            "lksytkjh": "581e",
+            "sbnoywr": "17",
+            "bgd7h8tyu54": "85",
+            "y654b5fs3tr": "2",
+            "bioduytlw": "8",
+            "bd4uy742": "5",
+            "h67456y": "c58",
+            "bvytikwqjk": "85",
+            "ngd4uy551": "58",
+            "bgiuytkw": "28",
+            "nd354uy4752": "0",
+            "ghtoiutkmlg": "23b",
+            "bd24y6421f": "71",
+            "tbvdiuytk": "c",
+            "ibvytiqjek": "e2",
+            "jnhf8u5231": "28",
+            "fjlkatj": "04e",
+            "hy5641d321t": "15",
+            "iogojti": "1",
+            "ngd4yut78": "3b",
+            "nkjhrew": "5",
+            "yt447e13f": "4",
+            "n3bf4uj7y7": "8",
+            "nbf4uj7y432": "67",
+            "yi854tew": "d0",
+            "h13ey474": "d02",
+            "quikgdky": "7a"
+        };
+        let response = await req(URL, data);
+        let percent_list = response.data.percent_list;
+        for (let item in percent_list) {
+            percent_list[item] = parseFloat(percent_list[item]);
+        }
+        console.log(percent_list);
+        seriesDataCS = Object.entries(percent_list);
+        console.log(seriesDataCS);
+    }
+
+
+</script>
+<script>
+    <!--    贪婪指数 -->
+    var seriesDataTF = [];
+
+    async function PH() {
+        let URL = 'https://api.jiucaishuo.com/v2/kjtl/kjtlconnect';
+        let data = {
+            "gu_code": "000001.SH",
+            "type": "pc",
+            "data_source": "xichou",
+            "version": "2.0.0",
+            "authtoken": "fF1qu720kZQZf14E2zhhAgMFCpjuC/qW",
+            "act_time": +new Date(),
+            "tirgkjfs": "97",
+            "abiokytke": "95",
+            "u54rg5d": "70",
+            "kf54ge7": "8",
+            "tiklsktr4": "7",
+            "lksytkjh": "c918",
+            "sbnoywr": "f6",
+            "bgd7h8tyu54": "41",
+            "y654b5fs3tr": "5",
+            "bioduytlw": "5",
+            "bd4uy742": "c",
+            "h67456y": "3c9",
+            "bvytikwqjk": "41",
+            "ngd4uy551": "c9",
+            "bgiuytkw": "2e",
+            "nd354uy4752": "1",
+            "ghtoiutkmlg": "536",
+            "bd24y6421f": "61",
+            "tbvdiuytk": "3",
+            "ibvytiqjek": "49",
+            "jnhf8u5231": "2e",
+            "fjlkatj": "704",
+            "hy5641d321t": "1c",
+            "iogojti": "1",
+            "ngd4yut78": "36",
+            "nkjhrew": "c",
+            "yt447e13f": "6",
+            "n3bf4uj7y7": "9",
+            "nbf4uj7y432": "95",
+            "yi854tew": "31",
+            "h13ey474": "318",
+            "quikgdky": "54"
+        };
+        let response = await req(URL, data);
+        let datetime = response.data.xAxis.categories;
+        let seriesData = response.data.series[0].data;
+        //    合并
+        for (let i = 0; i < datetime.length; i++) {
+            seriesDataTF.push([datetime[i], seriesData[i]]);
+        }
+        console.log(seriesDataTF, 'seriesDataTF');
+    }
+</script>
+<script>
+    function getColor(value) {
+        if (value <= 10) {
+            return '#4BA37B';
+        } else if (value <= 30) {
+            return '#58C2C3';
+        } else if (value <= 70) {
+            return '#448EF8';
+        } else if (value <= 90) {
+            return '#EEB140';
+        } else {
+            return '#DF3E39';
+        }
+
+    }
+</script>
+<script>
+    Promise.all([zhongZ(), CS(), PH()]).then(() => {
+        let option = {
+            legend: {
+                name: ['万得全A(除金融、石油石化)', '中证全指', '贪婪指数'],
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    animation: true,
+                    label: {
+                        backgroundColor: '#505765'
+                    }
+                }
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: xAxisDataZ,
+                }
+            ],
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    type: 'line',
+                    data: seriesDataZ,
+                    name: '万得全A(除金融、石油石化)',
+                    // 因有缺失的点, 所以采用如下属性来使数据正常连接不断开
+                    connectNulls: true,
+                    showSymbol: false,
+                },
+                {
+                    type: 'line',
+                    data: seriesDataCS,
+                    name: '中证全指)',
+                    // 因有缺失的点, 所以采用如下属性来使数据正常连接不断开
+                    connectNulls: true,
+                    showSymbol: false,
+                },
+                {
+                    type: 'line',
+                    data: seriesDataTF,
+                    name: '贪婪指数',
+                    // 因有缺失的点, 所以采用如下属性来使数据正常连接不断开
+                    connectNulls: true,
+                    showSymbol: false,
+                    lineStyle: {
+                        color: 'rgba(138,0,255,0.3)',
+                    },
+                },
+            ],
+            dataZoom: [
+                {
+                    startValue: seriesDataTF[0][0],
+                },
+                {
+                    type: 'inside'
+                }
+            ],
+            toolbox: {
+                right: 10,
+                feature: {
+                    restore: {},
+                    saveAsImage: {}
+                }
+            },
+            visualMap: {
+                top: 50,
+                right: 0,
+                // seriesIndex: [0],
+                pieces: [
+                    {
+                        gt: 0,
+                        lte: 10,
+                        color: '#4BA37B'
+                    },
+                    {
+                        gt: 10,
+                        lte: 30,
+                        color: '#58C2C3'
+                    },
+                    {
+                        gt: 30,
+                        lte: 70,
+                        color: '#448EF8'
+                    },
+                    {
+                        gt: 70,
+                        lte: 90,
+                        color: '#EEB140'
+                    },
+                    {
+                        gt: 90,
+                        color: '#DF3E39'
+                    },
+                ],
+                outOfRange: {
+                    color: '#999'
+                }
+            },
+            grid: {
+                top: '20%',
+                containLabel: true
+            },
+
+            graphic: [{
+                type: 'group',// 组（可以包含图形、文字、图片）
+                left: 0,
+                top: 'top',
+                children: [{
+                    type: 'rect',
+                    z: 100,
+                    left: '0',
+                    top: '0',
+                    shape: {
+                        width: 200,
+                        height: 100,
+                    },
+                    style: {
+                        fill: 'transparent',
+                    }
+                },
+                    {
+                        type: 'text',// 文字
+                        z: 100,
+                        left: 45,
+                        top: 13,
+                        style: {
+                            fill: getColor(seriesDataZ[seriesDataZ.length - 1][1]),
+                            text: '万得全A(除金融、石油石化)\t' + seriesDataZ[seriesDataZ.length - 1][1],
+                            font: '14px Microsoft YaHei',
+                        }
+                    },
+                    {
+                        type: 'text',
+                        z: 100,
+                        left: 45,
+                        top: 43,
+                        style: {
+                            fill: getColor(seriesDataCS[seriesDataCS.length - 1][1]),
+                            text: '中证全指\t' + seriesDataCS[seriesDataCS.length - 1][1],
+                            font: '14px Microsoft YaHei'
+                        }
+                    },
+                    {
+                        type: 'text',
+                        z: 100,
+                        left: 45,
+                        top: 73,
+                        style: {
+                            fill: getColor(seriesDataTF[seriesDataTF.length - 1][1]),
+                            text: '贪婪指数\t' + seriesDataTF[seriesDataTF.length - 1][1],
+                            font: '14px Microsoft YaHei'
+                        }
+                    },
+                ]
+            }]
+
+
+        };
+        myChart.setOption(option);
+    });
+</script>
+</body>
+</html>
